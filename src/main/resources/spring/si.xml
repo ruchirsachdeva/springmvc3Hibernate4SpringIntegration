@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:stream="http://www.springframework.org/schema/integration/stream"
+	xmlns:int-jdbc="http://www.springframework.org/schema/integration/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                                 http://www.springframework.org/schema/beans/spring-beans.xsd
+                                 http://www.springframework.org/schema/context
+                                 http://www.springframework.org/schema/context/spring-context.xsd
+                                 http://www.springframework.org/schema/integration
+                                 http://www.springframework.org/schema/integration/spring-integration-3.0.xsd
+                                 http://www.springframework.org/schema/integration/jdbc 
+                                 http://www.springframework.org/schema/integration/jdbc/spring-integration-jdbc.xsd">
+
+	<channel id="jdbcChannel" />
+
+
+<int-jdbc:inbound-channel-adapter id="jdbcInbound"
+ row-mapper="rowmapper" 
+  query="select * from blog_user where username = 'test'"
+  channel="jdbcChannel" data-source="dataSource">
+  <poller fixed-rate="5000">
+   <transactional />
+  </poller>
+</int-jdbc:inbound-channel-adapter>
+
+<service-activator ref="reqAct" method="readMessage"
+		input-channel="jdbcChannel"  />
+		
+		        <beans:bean id="rowmapper" class="com.blog.cavalr.entity.UserRowMapper" />
+		
+		
+<beans:bean id="reqAct"
+		class="com.blog.cavalr.entity.UserActivator">
+	</beans:bean>
+
+</beans:beans>

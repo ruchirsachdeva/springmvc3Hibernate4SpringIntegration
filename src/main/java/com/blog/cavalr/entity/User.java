@@ -2,6 +2,11 @@ package com.blog.cavalr.entity;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table
 public class User {
 
     private String userName;
@@ -15,6 +20,16 @@ public class User {
     private Date createdOn;
 
     private Date lastLoginOn;
+
+    public User() {
+    }
+
+    public User(String userName, String firstName, String lastName, String password) {
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+    }
 
     public String getUserName() {
         return userName;
